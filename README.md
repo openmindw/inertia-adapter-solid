@@ -353,3 +353,110 @@ pnpm build
 ## Next steps
 
 You can read the full documentation on Server-side Rendering on [InertiaJS's Offial Guide](https://inertiajs.com/server-side-rendering).
+
+# File-based Routing
+
+This adapter includes a file-based routing system similar to Next.js/SvelteKit.
+
+## Setup
+
+```tsx
+import { FileRouter, buildRoutes, RouteModule } from 'inertia-adapter-solid/router'
+
+// Import all route modules using Vite's glob import
+// Use [+] to match the literal '+' character
+const routeModules = import.meta.glob<RouteModule>(
+  './routes/**/[+](page|layout|error|loading).tsx',
+  { eager: true }
+)
+
+const routes = buildRoutes(routeModules)
+
+function App() {
+  return <FileRouter routes={routes} />
+}
+```
+
+## Route File Conventions
+
+```
+routes/
+├── +page.tsx          # / (home page)
+├── +layout.tsx        # root layout
+├── about/
+│   └── +page.tsx      # /about
+├── users/
+│   ├── +page.tsx      # /users
+│   ├── +layout.tsx    # users layout
+│   └── [id]/
+│       └── +page.tsx  # /users/:id
+└── posts/
+    └── [...slug]/
+        └── +page.tsx  # /posts/* (catch-all)
+```
+
+## Special Files
+
+| File | Purpose |
+|------|---------|
+| `+page.tsx` | Page component |
+| `+layout.tsx` | Layout component (can be nested) |
+| `+error.tsx` | Error boundary component |
+| `+loading.tsx` | Loading state component |
+
+## Router Hooks
+
+```tsx
+import { useRouter, usePathname, useParams, useSearchParams } from 'inertia-adapter-solid/router'
+
+function MyComponent() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const params = useParams()
+  const searchParams = useSearchParams()
+
+  // Navigate programmatically
+  router.navigate('/new-path')
+  router.navigate('/new-path', { replace: true })
+
+  return <div>Current path: {pathname()}</div>
+}
+```
+
+## Layout Component
+
+```tsx
+// routes/+layout.tsx
+import { Outlet } from 'inertia-adapter-solid/router'
+
+export default function RootLayout(props) {
+  return (
+    <div>
+      <header>My App</header>
+      <main>
+        <Outlet>{props.children}</Outlet>
+      </main>
+      <footer>© 2024</footer>
+    </div>
+  )
+}
+```
+
+## Error Boundary
+
+```tsx
+// routes/+error.tsx
+export default function ErrorPage(props: { error: Error; reset: () => void }) {
+  return (
+    <div>
+      <h1>Something went wrong!</h1>
+      <p>{props.error.message}</p>
+      <button onClick={props.reset}>Try again</button>
+    </div>
+  )
+}
+```
+
+# Phoenix Framework Integration
+
+For Phoenix (Elixir) framework integration guide, see [docs/PHOENIX_INTEGRATION.md](./docs/PHOENIX_INTEGRATION.md).

@@ -1,5 +1,19 @@
 # inertia-adapter-solid
 
+## 1.0.0-beta.3
+
+### Minor Changes
+
+- enhancement(router): Add file-based routing support
+  - New `FileRouter` component for file-system based routing similar to Next.js/SvelteKit
+  - New `RouterProvider` and `RouterLink` components for client-side navigation
+  - Route matching utilities: `matchPath`, `filePathToRoutePattern`, `buildRoutes`
+  - Support for dynamic routes `[id]` and catch-all routes `[...slug]`
+  - Nested layouts with `+layout.tsx` files
+  - Error boundaries with `+error.tsx` files
+  - Loading states with `+loading.tsx` files
+- docs: Add Phoenix framework integration guide (docs/PHOENIX_INTEGRATION.md)
+
 ## 1.0.0-beta.2
 
 ### Patch Changes

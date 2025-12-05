@@ -30,6 +30,8 @@ const builds = [
   { entryPoints: ['src/index.ts'], format: 'cjs', outfile: 'dist/index.js', platform: 'browser' },
   { entryPoints: ['src/server.ts'], format: 'esm', outfile: 'dist/server.esm.js', platform: 'node' },
   { entryPoints: ['src/server.ts'], format: 'cjs', outfile: 'dist/server.js', platform: 'node' },
+  { entryPoints: ['src/fileRouter.ts'], format: 'esm', outfile: 'dist/fileRouter.esm.js', platform: 'browser' },
+  { entryPoints: ['src/fileRouter.ts'], format: 'cjs', outfile: 'dist/fileRouter.js', platform: 'browser' },
 ]
 
 // biome-ignore lint/complexity/noForEach: <explanation>
