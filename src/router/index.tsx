@@ -58,18 +58,21 @@ interface RouterProviderProps {
 }
 
 export function RouterProvider(props: RouterProviderProps): JSX.Element {
-  const [pathname, setPathname] = createSignal(typeof window !== 'undefined' ? window.location.pathname : '/')
-  const [search, setSearch] = createSignal(typeof window !== 'undefined' ? window.location.search : '')
-  const [hash, setHash] = createSignal(typeof window !== 'undefined' ? window.location.hash : '')
+  const isClient = typeof window !== 'undefined'
+  const [pathname, setPathname] = createSignal(isClient ? window.location.pathname : '/')
+  const [search, setSearch] = createSignal(isClient ? window.location.search : '')
+  const [hash, setHash] = createSignal(isClient ? window.location.hash : '')
   const [params, _setParams] = createSignal<Record<string, string>>({})
 
   const updateLocation = () => {
+    if (typeof window === 'undefined') return
     setPathname(window.location.pathname)
     setSearch(window.location.search)
     setHash(window.location.hash)
   }
 
   const navigate = (url: string, options?: { replace?: boolean }) => {
+    if (typeof window === 'undefined') return
     if (options?.replace) {
       window.history.replaceState(null, '', url)
     } else {
@@ -79,6 +82,7 @@ export function RouterProvider(props: RouterProviderProps): JSX.Element {
   }
 
   onMount(() => {
+    if (typeof window === 'undefined') return
     const handlePopstate = () => updateLocation()
     window.addEventListener('popstate', handlePopstate)
     onCleanup(() => window.removeEventListener('popstate', handlePopstate))

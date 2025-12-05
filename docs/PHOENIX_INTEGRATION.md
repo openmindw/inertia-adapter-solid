@@ -24,7 +24,7 @@ createInertiaApp({
     // Phoenix 风格：组件名可能使用下划线命名
     const pages = import.meta.glob('./pages/**/*.tsx', { eager: true })
     // 支持 snake_case 到 PascalCase 转换
-    const normalizedName = name.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase())
+    const normalizedName = name.replace(/_(\w)/g, (_, letter) => letter.toUpperCase())
     return pages[`./pages/${normalizedName}.tsx`]
   },
   // ...

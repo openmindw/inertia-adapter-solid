@@ -11,7 +11,7 @@ export {
   type RouteMatch,
   type RouteModule,
   type RouterContextValue,
-} from './router/index.jsx'
+} from './router/index'
 
 // Re-export FileRouter components
 export {
@@ -25,4 +25,4 @@ export {
   type ErrorComponent,
   type RouteDefinition,
   type RouteModules,
-} from './router/FileRouter.jsx'
+} from './router/FileRouter'

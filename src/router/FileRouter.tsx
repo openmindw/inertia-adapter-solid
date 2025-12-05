@@ -1,5 +1,5 @@
 import { type Component, ErrorBoundary, type JSX, Suspense, createMemo } from 'solid-js'
-import { type RouteModule, RouterProvider, filePathToRoutePattern, matchPath, useRouter } from './index.jsx'
+import { type RouteModule, RouterProvider, filePathToRoutePattern, matchPath, useRouter } from './index'
 
 export interface ErrorFallbackProps {
   error: Error
@@ -43,22 +43,18 @@ export function buildRoutes(routeModules: RouteModules): Map<string, RouteDefini
       depth: pattern.split('/').filter(Boolean).length,
     }
 
-    const PageComponent = module.default || module.Page
-    const LayoutComponent = module.default || module.Layout
-    const ErrorComponent = module.default || module.Error
-    const LoadingComponent = module.default || module.Loading
-
+    // Use specific exports first, then fallback to default export
     if (filePath.includes('/+page.tsx') || filePath.includes('/+page.jsx')) {
-      existing.page = PageComponent
+      existing.page = module.Page || module.default
     }
     if (filePath.includes('/+layout.tsx') || filePath.includes('/+layout.jsx')) {
-      existing.layout = LayoutComponent
+      existing.layout = module.Layout || module.default
     }
     if (filePath.includes('/+error.tsx') || filePath.includes('/+error.jsx')) {
-      existing.error = ErrorComponent
+      existing.error = module.Error || module.default
     }
     if (filePath.includes('/+loading.tsx') || filePath.includes('/+loading.jsx')) {
-      existing.loading = LoadingComponent
+      existing.loading = module.Loading || module.default
     }
 
     routes.set(pattern, existing)
@@ -173,7 +169,7 @@ export function FileRoutes(props: FileRoutesProps): JSX.Element {
     return getLayoutsForPath(props.routes, router.pathname())
   })
 
-  // Nest content within layouts - REACTIVE
+  // Build the view by wrapping the page content with layouts (reactive to route changes)
   const view = createMemo(() => {
     const route = matchedRoute()
     const layoutComponents = layouts()
