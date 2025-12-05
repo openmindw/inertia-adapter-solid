@@ -29,6 +29,11 @@
       "types": "./dist/types/server.d.ts",
       "import": "./dist/server.esm.js",
       "require": "./dist/server.js"
+    },
+    "./router": {
+      "types": "./dist/types/fileRouter.d.ts",
+      "import": "./dist/fileRouter.esm.js",
+      "require": "./dist/fileRouter.js"
     }
   },
   "scripts": {
